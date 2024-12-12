@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Realtime Chart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@toast-ui/chart@4.2.0/dist/toastui-chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client/dist/socket.io.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1>IoT Realtime Data</h1>
+    <div class="mb-3">
+        <label for="chartName" class="form-label">Chart Name</label>
+        <input type="text" class="form-control" id="chartName" placeholder="Enter chart name">
+    </div>
+    <div id="chartsContainer" class="row mt-3">
+        <!-- Chart placeholders will be added dynamically -->
+    </div>
+    
+</div>
+<script>
+    const chartsContainer = document.getElementById('chartsContainer');
+    const charts = {};
+    
+    function createChart(chartName) {
+        const chartDiv = document.createElement('div');
+        chartDiv.className = 'col-md-4 mb-3';
+        chartDiv.id = `chart-${chartName}`;
+        chartDiv.innerHTML = `<h5>${chartName}</h5><div style="height: 400px;" id="gaugeChart-${chartName}"></div>`;
+        chartsContainer.appendChild(chartDiv);
+    
+        const chart = toastui.Chart.gaugeChart({
+            el: document.getElementById(`gaugeChart-${chartName}`),
+            data: { categories: [''], series: [{ name: 'Value', data: 0 }] },
+            options: { chart: { height: 400, width: 400 }, series: { radiusRange: [10, 90] } }
+        });
+    
+        charts[chartName] = chart;
+    }
+    
+    socket.on('update_data', (payload) => {
+        const { chart_name, value } = payload;
+    
+        if (!charts[chart_name]) {
+            createChart(chart_name);
+        }
+        charts[chart_name].setSeries({ data: value });
+    });
+    
+</script>
+</body>
+</html>
