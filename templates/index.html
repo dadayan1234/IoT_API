@@ -11,6 +11,23 @@
 <body>
 <div class="container mt-5">
     <h1>IoT Realtime Data</h1>
+
+    <!-- Controls to customize charts -->
+    <div id="chartControls" class="row mt-3 mb-4">
+        <div class="col-md-4">
+            <label for="chartColor">Chart Value Color:</label>
+            <input type="color" id="chartColor" value="#ff6384" class="form-control">
+        </div>
+        <div class="col-md-4">
+            <label for="bgColor">Chart Background Color:</label>
+            <input type="color" id="bgColor" value="#e0e0e0" class="form-control">
+        </div>
+        <div class="col-md-4">
+            <label for="showLegend">Show Legend:</label>
+            <input type="checkbox" id="showLegend" checked class="form-check-input">
+        </div>
+    </div>
+
     <div id="chartsContainer" class="row mt-3">
         <!-- Chart placeholders will be added dynamically -->
     </div>
@@ -22,6 +39,25 @@
 
     // Kontainer untuk menyimpan chart yang telah dibuat
     const charts = {};
+    let chartColor = '#ff6384';
+    let bgColor = '#e0e0e0';
+    let showLegend = true;
+
+    // Update chart colors and legend based on user input
+    document.getElementById('chartColor').addEventListener('input', (event) => {
+        chartColor = event.target.value;
+        updateAllCharts();
+    });
+
+    document.getElementById('bgColor').addEventListener('input', (event) => {
+        bgColor = event.target.value;
+        updateAllCharts();
+    });
+
+    document.getElementById('showLegend').addEventListener('change', (event) => {
+        showLegend = event.target.checked;
+        updateAllCharts();
+    });
 
     // Fungsi untuk membuat chart baru
     function createChart(chartName) {
@@ -47,7 +83,7 @@
                 labels: ['Value', 'Remaining'],
                 datasets: [{
                     data: [0, 100],
-                    backgroundColor: ['#ff6384', '#e0e0e0'],
+                    backgroundColor: [chartColor, bgColor],
                     borderWidth: 0
                 }]
             },
@@ -56,7 +92,7 @@
                 circumference: 180,
                 cutout: '70%',
                 plugins: {
-                    legend: { display: false },
+                    legend: { display: showLegend },
                     tooltip: { enabled: false }
                 }
             }
@@ -64,6 +100,15 @@
 
         // Simpan chart ke kontainer
         charts[chartName] = chart;
+    }
+
+    // Fungsi untuk memperbarui semua chart
+    function updateAllCharts() {
+        for (let chartName in charts) {
+            charts[chartName].data.datasets[0].backgroundColor = [chartColor, bgColor];
+            charts[chartName].options.plugins.legend.display = showLegend;
+            charts[chartName].update();
+        }
     }
 
     // Mendengarkan data dari server melalui Socket.IO
