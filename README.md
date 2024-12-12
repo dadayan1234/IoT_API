@@ -35,9 +35,11 @@ This project showcases a simulation where IoT devices (sensors) generate data an
 git clone https://github.com/your-repo/IoT-Sensor-Simulator.git
 cd IoT-Sensor-Simulator
 
+```
+
 ---
 
-2️⃣ Install Dependencies
+### 2️⃣ **Install Dependencies**
 Create a virtual environment and install the necessary dependencies.
 
 ```bash
@@ -48,12 +50,32 @@ python -m venv venv
 source venv/bin/activate  # On Windows, use venv\Scripts\activate
 # Install the dependencies
 pip install -r requirements.txt
+```
 
 ---
+
 ### 3️⃣ **Start the Server**
 Run the Flask server to start the application.
 
 ```bash
 # Run the server
 python app.py
+```
+The server will be running at http://localhost:5000.
+
+---
+
+### 4️⃣ **Run the Sensor Simulator**
+Run the simulator script that will send data to the server every 2 seconds.
+
+```bash
+Salin kode
+python client.py
+
+```
+
+---
+
+### 5️⃣ **Access the Dashboard**
+Visit http://localhost:5000 in your browser to access the real-time dashboard.
 
