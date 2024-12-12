@@ -1,0 +1,60 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Flask IoT API",
+      "description": "API documentation for the Flask IoT project"
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "IoT Data",
+        "description": "Operations related to IoT data"
+      }
+    ],
+    "paths": {
+      "/api/data": {
+        "post": {
+          "tags": ["IoT Data"],
+          "summary": "Receive IoT data",
+          "description": "Endpoint to receive IoT data and broadcast updates.",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "charts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "chart_name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Data received successfully"
+            },
+            "400": {
+              "description": "Error processing data"
+            }
+          }
+        }
+      }
+    }
+  }
+  
