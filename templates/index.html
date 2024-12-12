@@ -11,23 +11,6 @@
 <body>
 <div class="container mt-5">
     <h1>IoT Realtime Data</h1>
-
-    <!-- Controls to customize charts -->
-    <div id="chartControls" class="row mt-3 mb-4">
-        <div class="col-md-4">
-            <label for="chartColor">Chart Value Color:</label>
-            <input type="color" id="chartColor" value="#ff6384" class="form-control">
-        </div>
-        <div class="col-md-4">
-            <label for="bgColor">Chart Background Color:</label>
-            <input type="color" id="bgColor" value="#e0e0e0" class="form-control">
-        </div>
-        <div class="col-md-4">
-            <label for="showLegend">Show Legend:</label>
-            <input type="checkbox" id="showLegend" checked class="form-check-input">
-        </div>
-    </div>
-
     <div id="chartsContainer" class="row mt-3">
         <!-- Chart placeholders will be added dynamically -->
     </div>
@@ -39,26 +22,7 @@
 
     // Kontainer untuk menyimpan chart yang telah dibuat
     const charts = {};
-    let chartColor = '#ff6384';
-    let bgColor = '#e0e0e0';
-    let showLegend = true;
-
-    // Update chart colors and legend based on user input
-    document.getElementById('chartColor').addEventListener('input', (event) => {
-        chartColor = event.target.value;
-        updateAllCharts();
-    });
-
-    document.getElementById('bgColor').addEventListener('input', (event) => {
-        bgColor = event.target.value;
-        updateAllCharts();
-    });
-
-    document.getElementById('showLegend').addEventListener('change', (event) => {
-        showLegend = event.target.checked;
-        updateAllCharts();
-    });
-
+    
     // Fungsi untuk membuat chart baru
     function createChart(chartName) {
         const chartsContainer = document.getElementById('chartsContainer');
@@ -72,7 +36,21 @@
         const chartDiv = document.createElement('div');
         chartDiv.className = 'col-md-4 mb-3';
         chartDiv.id = `chart-${chartName}`;
-        chartDiv.innerHTML = `<h5>${chartName}</h5><canvas id="gaugeChart-${chartName}" width="300" height="300"></canvas>`;
+        chartDiv.innerHTML = `
+            <h5>${chartName}</h5>
+            <canvas id="gaugeChart-${chartName}" width="300" height="300"></canvas>
+            <button class="btn btn-info btn-sm mt-2" onclick="personalizeChart('${chartName}')">Personalize</button>
+            <div id="personalizeForm-${chartName}" class="personalize-form mt-3" style="display: none;">
+                <label for="chartColor-${chartName}">Chart Value Color:</label>
+                <input type="color" id="chartColor-${chartName}" value="#ff6384" class="form-control">
+                <label for="bgColor-${chartName}">Chart Background Color:</label>
+                <input type="color" id="bgColor-${chartName}" value="#e0e0e0" class="form-control">
+                <label for="showLegend-${chartName}">Show Legend:</label>
+                <input type="checkbox" id="showLegend-${chartName}" checked class="form-check-input">
+                <label for="showValue-${chartName}">Show Value in Center:</label>
+                <input type="checkbox" id="showValue-${chartName}" checked class="form-check-input">
+            </div>
+        `;
         chartsContainer.appendChild(chartDiv);
 
         // Inisialisasi chart dengan Chart.js
@@ -83,7 +61,7 @@
                 labels: ['Value', 'Remaining'],
                 datasets: [{
                     data: [0, 100],
-                    backgroundColor: [chartColor, bgColor],
+                    backgroundColor: ['#ff6384', '#e0e0e0'],
                     borderWidth: 0
                 }]
             },
@@ -92,8 +70,18 @@
                 circumference: 180,
                 cutout: '70%',
                 plugins: {
-                    legend: { display: showLegend },
-                    tooltip: { enabled: false }
+                    legend: { display: true },
+                    tooltip: { enabled: false },
+                    datalabels: {
+                        display: true,
+                        formatter: function(value) {
+                            return value + '%'; // Menampilkan data sebagai persentase
+                        },
+                        color: '#000',
+                        font: { weight: 'bold', size: 16 },
+                        align: 'center',
+                        anchor: 'center'
+                    }
                 }
             }
         });
@@ -102,11 +90,47 @@
         charts[chartName] = chart;
     }
 
-    // Fungsi untuk memperbarui semua chart
-    function updateAllCharts() {
-        for (let chartName in charts) {
+    // Fungsi untuk mempersonalisasi chart
+    function personalizeChart(chartName) {
+        const form = document.getElementById(`personalizeForm-${chartName}`);
+        const chartColorInput = document.getElementById(`chartColor-${chartName}`);
+        const bgColorInput = document.getElementById(`bgColor-${chartName}`);
+        const showLegendInput = document.getElementById(`showLegend-${chartName}`);
+        const showValueInput = document.getElementById(`showValue-${chartName}`);
+
+        // Tampilkan atau sembunyikan form personalisasi
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+
+        // Simpan perubahan pengaturan ketika form berubah
+        chartColorInput.addEventListener('input', () => {
+            updateChartAppearance(chartName);
+        });
+
+        bgColorInput.addEventListener('input', () => {
+            updateChartAppearance(chartName);
+        });
+
+        showLegendInput.addEventListener('change', () => {
+            updateChartAppearance(chartName);
+        });
+
+        showValueInput.addEventListener('change', () => {
+            updateChartAppearance(chartName);
+        });
+    }
+
+    // Fungsi untuk memperbarui pengaturan chart
+    function updateChartAppearance(chartName) {
+        const chartColor = document.getElementById(`chartColor-${chartName}`).value;
+        const bgColor = document.getElementById(`bgColor-${chartName}`).value;
+        const showLegend = document.getElementById(`showLegend-${chartName}`).checked;
+        const showValue = document.getElementById(`showValue-${chartName}`).checked;
+
+        // Update chart dengan pengaturan baru
+        if (charts[chartName]) {
             charts[chartName].data.datasets[0].backgroundColor = [chartColor, bgColor];
             charts[chartName].options.plugins.legend.display = showLegend;
+            charts[chartName].options.plugins.datalabels.display = showValue;
             charts[chartName].update();
         }
     }
