@@ -24,7 +24,7 @@ app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 def index():
     return render_template('index.html')
 
-@app.route('/api/data', methods=['POST'])
+@app.route('/data', methods=['POST'])
 def receive_data():
     """
     Receive IoT data

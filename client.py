@@ -4,7 +4,7 @@ import time
 import requests
 
 # URL endpoint POST server Flask
-url = "http://localhost:5000/api/data"  # Gantilah dengan URL server Anda
+url = "http://localhost:5000/data"  # Gantilah dengan URL server Anda
 
 def send_sensor_data():
     while True:
@@ -13,7 +13,9 @@ def send_sensor_data():
             "charts": [
                 {"chart_name": "Temperature", "value": random.randint(15, 30)},  # Temperatur acak antara 15-30
                 {"chart_name": "Humidity", "value": random.randint(40, 80)},     # Kelembaban acak antara 40-80
-                {"chart_name": "LDR", "value": random.randint(10, 100)}           # LDR acak antara 10-100
+                {"chart_name": "LDR", "value": random.randint(10, 100)},           # LDR acak antara 10-100
+                {"chart_name": "Jarak", "value": random.randint(10, 100)},
+                {"chart_name": "Kecepatan", "value": random.randint(10, 100)} 
             ]
         }
 

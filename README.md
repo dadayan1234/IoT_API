@@ -47,7 +47,7 @@ Salin kode
 # Create a virtual environment
 python -m venv venv
 # Activate the virtual environment
-source venv/bin/activate  # On Windows, use venv\Scripts\activate
+venv\Scripts\activate  # On Windows, use venv\Scripts\activate
 # Install the dependencies
 pip install -r requirements.txt
 ```
@@ -60,6 +60,7 @@ Run the Flask server to start the application.
 ```bash
 # Run the server
 python app.py
+python client.py
 ```
 The server will be running at http://localhost:5000.
 
