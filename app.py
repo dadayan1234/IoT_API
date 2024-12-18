@@ -15,7 +15,7 @@ data_store = {}  # Menyimpan data payload secara dinamis
 db_helper = DBHelper(config.DB_NAME)  # Initialize SQLite database
 
 # Swagger setup
-SWAGGER_URL = '/api/docs'  # URL for accessing Swagger UI
+SWAGGER_URL = '/docs'  # URL for accessing Swagger UI
 API_URL = '/static/swagger.json'  # Path to the API documentation JSON
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,

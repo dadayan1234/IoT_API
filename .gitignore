@@ -1,2 +1,3 @@
 # Ignore folder 'iot'
 iot/
+__pycache__
