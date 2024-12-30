@@ -1,3 +1,3 @@
 DEBUG = True
-SECRET_KEY = 'your_secret_key'
+SECRET_KEY = 'my_secret'
 DB_NAME = 'charts.db'

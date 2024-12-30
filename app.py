@@ -26,6 +26,10 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 )
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
+@app.route('/chart')
+def chart():
+    return render_template('chart.html')
+
 @app.route('/')
 def index():
     return render_template('index.html')
